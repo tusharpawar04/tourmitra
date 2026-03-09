@@ -13,8 +13,15 @@ const reviewRoutes = require('./routes/reviews');
 
 const app = express();
 
-// ── Connect to MongoDB ──────────────────────────────────
-connectDB();
+// ── Ensure DB is connected before every request (serverless-safe) ──
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ── Middleware ───────────────────────────────────────────
 const allowedOrigins = [
@@ -59,4 +66,3 @@ if (!process.env.VERCEL) {
 
 // Export for Vercel serverless
 module.exports = app;
-});

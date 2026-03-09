@@ -29,7 +29,7 @@ const allowedOrigins = [
   'http://localhost:5174',
   'http://localhost:3000',
   process.env.FRONTEND_URL,
-].filter(Boolean);
+].filter(Boolean).map(u => u.replace(/\/+$/, ''));
 
 app.use(cors({
   origin: (origin, cb) => {

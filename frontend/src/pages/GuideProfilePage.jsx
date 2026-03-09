@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { guidesAPI, reviewsAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const StarRating = ({ rating, size = '0.85rem' }) => (
   <span className="star" style={{ fontSize: size, letterSpacing: '1px' }}>
@@ -12,6 +13,8 @@ const StarRating = ({ rating, size = '0.85rem' }) => (
 
 const GuideProfilePage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [guide, setGuide] = useState(null);
   const [guideReviews, setGuideReviews] = useState([]);
   const [otherGuides, setOtherGuides] = useState([]);
@@ -130,12 +133,12 @@ const GuideProfilePage = () => {
 
             {/* CTA */}
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <Link to="/login">
-                <button className="btn-primary" style={{ padding: '12px 28px', fontSize: '0.95rem' }}>Book This Guide</button>
-              </Link>
-              <Link to="/login">
-                <button className="btn-secondary" style={{ padding: '12px 20px', fontSize: '0.95rem' }}>💬 Message</button>
-              </Link>
+              <button className="btn-primary" style={{ padding: '12px 28px', fontSize: '0.95rem' }}
+                onClick={() => navigate(user ? `/book/${guide._id}` : '/login')}
+              >Book This Guide</button>
+              <button className="btn-secondary" style={{ padding: '12px 20px', fontSize: '0.95rem' }}
+                onClick={() => navigate(user ? `/book/${guide._id}` : '/login')}
+              >💬 Message</button>
             </div>
           </motion.div>
 
@@ -363,12 +366,12 @@ const GuideProfilePage = () => {
               <p style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)', marginBottom: '16px' }}>
                 + Group surcharge: ₹200/person for 4+ travelers
               </p>
-              <Link to="/login" style={{ display: 'block' }}>
-                <button className="btn-primary" style={{ width: '100%', padding: '14px', fontSize: '1rem' }}>Book {guide.name.split(' ')[0]}</button>
-              </Link>
-              <Link to="/login" style={{ display: 'block', marginTop: '10px' }}>
-                <button className="btn-secondary" style={{ width: '100%', padding: '12px', fontSize: '0.9rem' }}>💬 Send Message</button>
-              </Link>
+              <button className="btn-primary" style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
+                onClick={() => navigate(user ? `/book/${guide._id}` : '/login')}
+              >Book {guide.name.split(' ')[0]}</button>
+              <button className="btn-secondary" style={{ width: '100%', padding: '12px', fontSize: '0.9rem', marginTop: '10px' }}
+                onClick={() => navigate(user ? `/book/${guide._id}` : '/login')}
+              >💬 Send Message</button>
               <p style={{ textAlign: 'center', fontSize: '0.72rem', color: 'var(--muted-lavender)', marginTop: '12px' }}>🔒 Escrow-protected payment</p>
             </div>
           </div>

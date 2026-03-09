@@ -816,8 +816,8 @@ const AITripPlannerPage = () => {
                       width: '100%', display: 'flex', alignItems: 'center', gap: '14px',
                       padding: '16px 20px', borderRadius: expandedDays[day.day] ? '16px 16px 0 0' : '16px',
                       cursor: 'pointer', border: '1px solid var(--glass-border)', textAlign: 'left',
-                      background: expandedDays[day.day] ? 'rgba(232,98,42,0.04)' : 'rgba(255,255,255,0.7)',
-                      backdropFilter: 'blur(12px)', transition: 'all 0.3s',
+                      background: expandedDays[day.day] ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.85)',
+                      backdropFilter: 'blur(20px)', transition: 'all 0.3s',
                     }}
                   >
                     <div style={{
@@ -828,7 +828,7 @@ const AITripPlannerPage = () => {
                     }}>D{day.day}</div>
                     <div style={{ flex: 1 }}>
                       <h3 style={{ fontSize: '1rem', color: 'var(--deep-violet)', margin: 0 }}>{day.title}</h3>
-                      <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{day.activities.length} activities</span>
+                      <span style={{ fontSize: '0.78rem', color: '#5a4570' }}>{day.activities.length} activities</span>
                     </div>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ transform: expandedDays[day.day] ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s', flexShrink: 0 }}>
                       <path d="M5 8l5 5 5-5" stroke="var(--muted-lavender)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -844,7 +844,7 @@ const AITripPlannerPage = () => {
                         style={{
                           overflow: 'hidden', borderRadius: '0 0 16px 16px',
                           border: '1px solid var(--glass-border)', borderTop: 'none',
-                          background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(8px)',
+                          background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)',
                         }}
                       >
                         <div style={{ padding: '16px 20px' }}>
@@ -860,16 +860,16 @@ const AITripPlannerPage = () => {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '4px' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span style={{ fontSize: '1.2rem' }}>{activity.icon}</span>
-                                    <h4 style={{ fontSize: '0.92rem', color: 'var(--deep-violet)', margin: 0 }}>{activity.name}</h4>
+                                    <h4 style={{ fontSize: '0.92rem', color: '#1a0d2e', fontWeight: 700, margin: 0 }}>{activity.name}</h4>
                                   </div>
                                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                     <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: '6px', background: 'rgba(245,166,35,0.1)', color: 'var(--burnt-orange)', fontWeight: 600 }}>{activity.time}</span>
-                                    <span style={{ fontSize: '0.7rem', color: 'var(--muted-lavender)' }}>⏱ {activity.duration}</span>
+                                    <span style={{ fontSize: '0.7rem', color: '#5a4570', fontWeight: 500 }}>⏱ {activity.duration}</span>
                                   </div>
                                 </div>
-                                <p style={{ fontSize: '0.84rem', color: 'var(--muted-lavender)', lineHeight: 1.5, margin: '4px 0' }}>{activity.desc}</p>
+                                <p style={{ fontSize: '0.84rem', color: '#4a3860', lineHeight: 1.5, margin: '4px 0' }}>{activity.desc}</p>
                                 {activity.tip && (
-                                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '8px', background: 'rgba(139,92,246,0.06)', fontSize: '0.75rem', color: '#8B5CF6', marginTop: '4px' }}>
+                                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '8px', background: 'rgba(139,92,246,0.12)', fontSize: '0.75rem', color: '#7C3AED', fontWeight: 500, marginTop: '4px' }}>
                                     💡 <em>{activity.tip}</em>
                                   </div>
                                 )}

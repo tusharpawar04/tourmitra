@@ -42,9 +42,17 @@ const DestinationDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="page-content" style={{ paddingTop: 'calc(var(--nav-height) + 60px)', textAlign: 'center' }}>
-        <div className="glass" style={{ padding: '60px', maxWidth: '500px', margin: '0 auto' }}>
-          <p style={{ color: 'var(--muted-lavender)' }}>Loading destination...</p>
+      <div className="page-content" style={{ paddingTop: 'calc(var(--nav-height) + 60px)', textAlign: 'center', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="glass" style={{ padding: '60px 40px', maxWidth: '400px', margin: '0 auto' }}>
+          <div style={{
+            width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 20px',
+            border: '3px solid rgba(245, 166, 35, 0.15)',
+            borderTopColor: 'var(--burnt-orange)',
+            animation: 'spin 0.7s linear infinite',
+          }} />
+          <p style={{ color: 'var(--deep-violet)', fontWeight: 600, fontSize: '1.05rem', marginBottom: '6px' }}>Loading destination...</p>
+          <p style={{ color: 'var(--muted-lavender)', fontSize: '0.82rem' }}>Fetching guides & reviews</p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       </div>
     );

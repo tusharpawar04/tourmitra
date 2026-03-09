@@ -48,9 +48,15 @@ app.use('/api/reviews', reviewRoutes);
 // ── Error handler ───────────────────────────────────────
 app.use(errorHandler);
 
-// ── Start server ────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`\n🚀 Tourmitra API running on http://localhost:${PORT}`);
-  console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
+// ── Start server (local dev only — on Vercel the export is used) ──
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Tourmitra API running on http://localhost:${PORT}`);
+    console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
+  });
+}
+
+// Export for Vercel serverless
+module.exports = app;
 });

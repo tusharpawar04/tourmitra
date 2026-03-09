@@ -106,7 +106,7 @@ const BookingFlowPage = () => {
                     </div>
                   )}
 
-                  <div className="glass" style={{ padding: '24px', borderRadius: '14px', marginBottom: '20px' }}>
+                  <div className="glass" style={{ padding: '24px', borderRadius: '14px', marginBottom: '20px', position: 'relative', zIndex: 100 }}>
                     <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Start Date</label>
                     <CalendarPicker
                       value={startDate}

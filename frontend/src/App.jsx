@@ -1,9 +1,18 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import SunsetBackground from './components/SunsetBackground';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+
+// Scroll to top on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 // Lazy load all pages for faster initial load
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -38,6 +47,9 @@ const PageLoader = () => (
 function App() {
   return (
     <Router>
+      {/* Scroll to top on navigation */}
+      <ScrollToTop />
+
       {/* Sunset SVG — always behind everything */}
       <SunsetBackground />
 

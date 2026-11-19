@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { guidesAPI, reviewsAPI } from '../services/api';
+import { guidesAPI, reviewsAPI, packagesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 const StarRating = ({ rating, size = '0.85rem' }) => (
@@ -18,6 +18,7 @@ const GuideProfilePage = () => {
   const [guide, setGuide] = useState(null);
   const [guideReviews, setGuideReviews] = useState([]);
   const [otherGuides, setOtherGuides] = useState([]);
+  const [guidePackages, setGuidePackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('about');
 
@@ -25,10 +26,12 @@ const GuideProfilePage = () => {
     Promise.all([
       guidesAPI.getById(id),
       guidesAPI.getAll({ limit: 6 }),
-    ]).then(([guideData, allGuidesData]) => {
+      packagesAPI.getByGuide(id),
+    ]).then(([guideData, allGuidesData, packagesData]) => {
       setGuide(guideData.guide);
       setGuideReviews(guideData.reviews || []);
       setOtherGuides(allGuidesData.guides.filter(g => g._id !== id).slice(0, 3));
+      setGuidePackages(packagesData.packages || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [id]);
@@ -112,7 +115,7 @@ const GuideProfilePage = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '0.8rem',
-                  fontWeight: 700,
+                  fontWeight: 400,
                   border: '3px solid #fff',
                 }}>✓</div>
               )}
@@ -124,7 +127,7 @@ const GuideProfilePage = () => {
               <p style={{ fontSize: '0.95rem', color: 'var(--muted-lavender)', marginBottom: '8px' }}>📍 {guide.city}, India</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <StarRating rating={guide.rating} size="1rem" />
-                <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--deep-violet)' }}>{guide.rating}</span>
+                <span style={{ fontSize: '1rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{guide.rating}</span>
                 <span style={{ fontSize: '0.85rem', color: 'var(--muted-lavender)' }}>({guide.reviews} reviews)</span>
                 <span style={{ color: 'var(--glass-border)' }}>•</span>
                 <span style={{ fontSize: '0.85rem', color: 'var(--muted-lavender)' }}>{guide.tours} tours completed</span>
@@ -177,7 +180,7 @@ const GuideProfilePage = () => {
                 border: 'none',
                 borderBottom: activeTab === tab ? '2px solid var(--burnt-orange)' : '2px solid transparent',
                 color: activeTab === tab ? 'var(--burnt-orange)' : 'var(--muted-lavender)',
-                fontWeight: activeTab === tab ? 600 : 400,
+                fontWeight: activeTab === tab ? 500 : 400,
                 fontSize: '0.9rem',
                 fontFamily: 'var(--font-body)',
                 cursor: 'pointer',
@@ -202,6 +205,49 @@ const GuideProfilePage = () => {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
                 <h2 style={{ fontSize: '1.3rem', marginBottom: '16px' }}>About {guide.name}</h2>
                 <p style={{ fontSize: '0.95rem', lineHeight: 1.8, color: 'var(--muted-lavender)', marginBottom: '32px' }}>{guide.about}</p>
+
+                {/* Packages Section */}
+                {guidePackages.length > 0 && (
+                  <>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '12px' }}>Available Packages</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}>
+                      {guidePackages.filter(pkg => pkg.is_active).map(pkg => (
+                        <div key={pkg._id} className="glass-card" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                          <div style={{ flex: '1 1 250px' }}>
+                            <h4 style={{ fontSize: '1rem', color: 'var(--deep-violet)', margin: '0 0 6px' }}>{pkg.title}</h4>
+                            <p style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)', marginBottom: '8px' }}>
+                              ⏱️ {pkg.duration_hours} hours • 👥 Up to {pkg.max_guests} guests
+                            </p>
+                            {pkg.inclusions && pkg.inclusions.length > 0 && (
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                {pkg.inclusions.slice(0, 4).map((inc, i) => (
+                                  <span key={i} style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '6px', background: 'rgba(245,166,35,0.1)', color: 'var(--burnt-orange)' }}>
+                                    {inc}
+                                  </span>
+                                ))}
+                                {pkg.inclusions.length > 4 && (
+                                  <span style={{ fontSize: '0.7rem', color: 'var(--muted-lavender)' }}>+{pkg.inclusions.length - 4} more</span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '1.3rem', fontWeight: 400, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)', marginBottom: '4px' }}>
+                              ₹{pkg.base_price.toLocaleString()}
+                            </div>
+                            <button 
+                              className="btn-primary" 
+                              style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+                              onClick={() => navigate(user ? `/book/${guide._id}?package=${pkg._id}` : '/login')}
+                            >
+                              Book Now
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
 
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '12px' }}>Specialties</h3>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '28px' }}>
@@ -256,7 +302,7 @@ const GuideProfilePage = () => {
                         <h3 style={{ fontSize: '1.05rem', color: 'var(--deep-violet)', margin: 0 }}>{itin.title}</h3>
                         <span style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)' }}>⏱️ {itin.duration}</span>
                       </div>
-                      <span style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>₹{itin.price.toLocaleString()}</span>
+                      <span style={{ fontSize: '1.1rem', fontWeight: 400, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>₹{itin.price.toLocaleString()}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {itin.highlights.map(h => (
@@ -276,9 +322,9 @@ const GuideProfilePage = () => {
                   <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '500px' }}>
                     <thead>
                       <tr>
-                        <th style={{ padding: '10px', fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', textAlign: 'left', borderBottom: '1px solid var(--glass-border)' }}></th>
+                        <th style={{ padding: '10px', fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', textAlign: 'left', borderBottom: '1px solid var(--glass-border)' }}></th>
                         {days.map(d => (
-                          <th key={d} style={{ padding: '10px', fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', textAlign: 'center', borderBottom: '1px solid var(--glass-border)' }}>{d}</th>
+                          <th key={d} style={{ padding: '10px', fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', textAlign: 'center', borderBottom: '1px solid var(--glass-border)' }}>{d}</th>
                         ))}
                       </tr>
                     </thead>
@@ -299,7 +345,7 @@ const GuideProfilePage = () => {
                                   color: available ? '#4CAF50' : 'var(--muted-lavender)',
                                   fontSize: '0.75rem',
                                   lineHeight: '28px',
-                                  fontWeight: 600,
+                                  fontWeight: 400,
                                 }}>
                                   {available ? '✓' : '–'}
                                 </span>
@@ -325,9 +371,9 @@ const GuideProfilePage = () => {
                     <div key={review._id} className="glass-card" style={{ padding: '20px', marginBottom: '12px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--burnt-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.85rem' }}>{(review.author?.name || 'A')[0]}</div>
+                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--burnt-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 400, fontSize: '0.85rem' }}>{(review.author?.name || 'A')[0]}</div>
                           <div>
-                            <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{review.author?.name || 'Anonymous'}</div>
+                            <div style={{ fontSize: '0.88rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{review.author?.name || 'Anonymous'}</div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>{new Date(review.createdAt).toLocaleDateString()}</div>
                           </div>
                         </div>
@@ -359,7 +405,7 @@ const GuideProfilePage = () => {
                 ].map(tier => (
                   <div key={tier.label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '0.9rem' }}>
                     <span style={{ color: 'var(--muted-lavender)' }}>{tier.label}</span>
-                    <span style={{ fontWeight: 700, color: 'var(--deep-violet)' }}>₹{tier.price.toLocaleString()}</span>
+                    <span style={{ fontWeight: 400, color: 'var(--deep-violet)' }}>₹{tier.price.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -391,9 +437,9 @@ const GuideProfilePage = () => {
                   <p style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)', marginBottom: '8px' }}>📍 {g.city}</p>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', marginBottom: '6px' }}>
                     <StarRating rating={g.rating} />
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{g.rating}</span>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{g.rating}</span>
                   </div>
-                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--deep-violet)' }}>₹{g.price.toLocaleString()}<span style={{ fontWeight: 400, fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>/day</span></span>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 400, color: 'var(--deep-violet)' }}>₹{g.price.toLocaleString()}<span style={{ fontWeight: 400, fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>/day</span></span>
                 </div>
               </Link>
             ))}

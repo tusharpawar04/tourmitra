@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { destinationsAPI } from '../services/api';
 import CalendarPicker from '../components/CalendarPicker';
+import { useToast } from '../components/Toast';
 
 /* ─── Static data ────────────────────────────────────────── */
 const vibeOptions = [
@@ -139,6 +140,7 @@ const budgetMultipliers = { budget: 0.6, mid: 1, premium: 1.6, luxury: 2.5 };
    Component
    ═══════════════════════════════════════════════════════════ */
 const AITripPlannerPage = () => {
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [selectedDest, setSelectedDest] = useState('');
   const [travelDates, setTravelDates] = useState('');
@@ -363,6 +365,50 @@ const AITripPlannerPage = () => {
 
   const toggleDay = (day) => setExpandedDays(prev => ({ ...prev, [day]: !prev[day] }));
 
+  /* ─── Result actions ─── */
+  const handleSave = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('tourmitra_itineraries') || '[]');
+      const newEntry = {
+        id: Date.now(),
+        destination: itinerary?.destination?.name || selectedDest,
+        days: itinerary?.totalDays || numDays,
+        savedAt: new Date().toISOString(),
+        itinerary,
+      };
+      saved.unshift(newEntry);
+      localStorage.setItem('tourmitra_itineraries', JSON.stringify(saved.slice(0, 10)));
+      toast.success('Itinerary Saved!', 'Your customized trip plan is saved to this browser.');
+    } catch {
+      toast.error('Save Failed', 'Could not save itinerary locally.');
+    }
+  };
+
+  const handleShare = async () => {
+    const shareText = `Check out my ${itinerary?.totalDays}-day trip plan to ${itinerary?.destination?.name || selectedDest} on Tourmitra! 🗺️✨`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${itinerary?.destination?.name} Itinerary`, text: shareText, url: window.location.href });
+        return;
+      } catch {
+        // Fall back to copy
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(`${shareText}\n${window.location.href}`);
+      toast.success('Link Copied!', 'Trip summary and link copied to clipboard.');
+    } catch {
+      toast.info('Share Trip', 'Copy the URL from your address bar to share.');
+    }
+  };
+
+  const handleExport = () => {
+    toast.info('Print / PDF', 'Opening print preview. Choose "Save as PDF" to download.');
+    setTimeout(() => {
+      window.print();
+    }, 400);
+  };
+
   /* ─── Render ─── */
   const stepTitles = ['Destination', 'Dates', 'Travelers', 'Vibes', 'Budget', 'Pace', 'Finish'];
 
@@ -460,7 +506,7 @@ const AITripPlannerPage = () => {
                   <span style={{
                     fontSize: '0.62rem',
                     color: i + 1 <= step ? 'var(--deep-violet)' : 'var(--muted-lavender)',
-                    fontWeight: i + 1 === step ? 700 : 400,
+                    fontWeight: i + 1 === step ? 500 : 400,
                     whiteSpace: 'nowrap',
                   }}>{t}</span>
                 </div>
@@ -468,7 +514,7 @@ const AITripPlannerPage = () => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '12px 0 24px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)' }}>Step {step} of {totalSteps}</span>
+              <span style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)' }}>Step {step} of {totalSteps}</span>
               <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{Math.round((step / totalSteps) * 100)}%</span>
             </div>
 
@@ -496,10 +542,10 @@ const AITripPlannerPage = () => {
                             <div key={s._id} className="ai-autocomplete-item" onClick={() => pickSuggestion(s)}>
                               <img src={s.image} alt="" style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover' }} />
                               <div>
-                                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--deep-violet)' }}>{s.name}</div>
+                                <div style={{ fontWeight: 400, fontSize: '0.9rem', color: 'var(--deep-violet)' }}>{s.name}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>{s.state} • {s.tag} • {s.duration}</div>
                               </div>
-                              <span style={{ marginLeft: 'auto', fontSize: '0.8rem', fontWeight: 600, color: 'var(--burnt-orange)' }}>₹{s.price?.toLocaleString()}/day</span>
+                              <span style={{ marginLeft: 'auto', fontSize: '0.8rem', fontWeight: 400, color: 'var(--burnt-orange)' }}>₹{s.price?.toLocaleString()}/day</span>
                             </div>
                           ))}
                         </div>
@@ -526,7 +572,7 @@ const AITripPlannerPage = () => {
                         <button key={opt} className={`pill ${travelDates === opt ? 'active' : ''}`} onClick={() => setTravelDates(opt)}>{opt}</button>
                       ))}
                     </div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>
                       Trip Duration: <span style={{ color: 'var(--burnt-orange)' }}>{numDays} day{numDays > 1 ? 's' : ''}</span>
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -557,16 +603,16 @@ const AITripPlannerPage = () => {
                           }}
                         >
                           <div style={{ fontSize: '1.6rem', marginBottom: '4px' }}>{opt.icon}</div>
-                          <div style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{opt.label}</div>
+                          <div style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{opt.label}</div>
                         </button>
                       ))}
                     </div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
                       Group Size: <span style={{ color: 'var(--burnt-orange)' }}>{groupSize}</span>
                     </label>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                       <button className="pill" onClick={() => setGroupSize(Math.max(1, groupSize - 1))} style={{ padding: '8px 14px' }}>−</button>
-                      <div style={{ width: '50px', textAlign: 'center', fontSize: '1.2rem', fontWeight: 700, color: 'var(--deep-violet)' }}>{groupSize}</div>
+                      <div style={{ width: '50px', textAlign: 'center', fontSize: '1.2rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{groupSize}</div>
                       <button className="pill" onClick={() => setGroupSize(Math.min(20, groupSize + 1))} style={{ padding: '8px 14px' }}>+</button>
                     </div>
                   </div>
@@ -600,7 +646,7 @@ const AITripPlannerPage = () => {
                               }}>✓</div>
                             )}
                             <span style={{ fontSize: '1.5rem' }}>{vibe.icon}</span>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--deep-violet)', marginTop: '4px' }}>{vibe.label}</div>
+                            <div style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--deep-violet)', marginTop: '4px' }}>{vibe.label}</div>
                           </button>
                         );
                       })}
@@ -627,7 +673,7 @@ const AITripPlannerPage = () => {
                         >
                           <span style={{ fontSize: '1.5rem' }}>{opt.icon}</span>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{opt.label}</div>
+                            <div style={{ fontSize: '0.95rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{opt.label}</div>
                             <div style={{ fontSize: '0.8rem', color: 'var(--muted-lavender)' }}>{opt.desc}</div>
                           </div>
                           {budget === opt.value && <span style={{ fontSize: '1.1rem', color: 'var(--burnt-orange)' }}>✓</span>}
@@ -656,7 +702,7 @@ const AITripPlannerPage = () => {
                         >
                           <span style={{ fontSize: '2rem' }}>{opt.icon}</span>
                           <div>
-                            <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{opt.label}</div>
+                            <div style={{ fontSize: '1rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{opt.label}</div>
                             <div style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)' }}>{opt.desc}</div>
                             <div style={{ fontSize: '0.72rem', color: 'var(--burnt-orange)', marginTop: '2px' }}>
                               {opt.value === 'relaxed' ? '3 activities/day' : opt.value === 'moderate' ? '4 activities/day' : '6 activities/day'}
@@ -685,7 +731,7 @@ const AITripPlannerPage = () => {
                       background: 'linear-gradient(135deg, rgba(45,27,78,0.05), rgba(232,98,42,0.05))',
                       border: '1px solid var(--glass-border)',
                     }}>
-                      <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--deep-violet)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <div style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         ✦ Trip Summary
                       </div>
                       <div className="ai-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.85rem' }}>
@@ -739,7 +785,7 @@ const AITripPlannerPage = () => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                   <div>
-                    <div style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: 'linear-gradient(135deg, var(--burnt-orange), var(--golden-amber))', color: '#fff', letterSpacing: '0.05em', marginBottom: '8px' }}>
+                    <div style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 400, background: 'linear-gradient(135deg, var(--burnt-orange), var(--golden-amber))', color: '#fff', letterSpacing: '0.05em', marginBottom: '8px' }}>
                       ✦ AI GENERATED
                     </div>
                     <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', marginBottom: '8px', lineHeight: 1.2 }}>
@@ -750,9 +796,9 @@ const AITripPlannerPage = () => {
                     </p>
                   </div>
                   <div className="ai-result-actions" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>📥 Save</button>
-                    <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>🔗 Share</button>
-                    <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>📄 Export PDF</button>
+                    <button onClick={handleSave} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>📥 Save</button>
+                    <button onClick={handleShare} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>🔗 Share</button>
+                    <button onClick={handleExport} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.8rem' }}>📄 Export PDF</button>
                   </div>
                 </div>
               </motion.div>
@@ -772,7 +818,7 @@ const AITripPlannerPage = () => {
                   <div key={i} className="glass-card" style={{ padding: '16px', textAlign: 'center' }}>
                     <div style={{ fontSize: '1.5rem', marginBottom: '4px' }}>{stat.icon}</div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted-lavender)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>{stat.label}</div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--deep-violet)' }}>{stat.value}</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{stat.value}</div>
                     {stat.sub && <div style={{ fontSize: '0.72rem', color: 'var(--muted-lavender)', marginTop: '2px' }}>{stat.sub}</div>}
                   </div>
                 ))}
@@ -794,7 +840,7 @@ const AITripPlannerPage = () => {
                     { label: 'Activities', amount: itinerary.costBreakdown.activities, color: '#22C55E' },
                   ].map((item, i) => (
                     <div key={i} style={{ flex: '1 1 100px', padding: '12px', borderRadius: '12px', background: `${item.color}08`, border: `1px solid ${item.color}20`, textAlign: 'center' }}>
-                      <div style={{ fontSize: '1rem', fontWeight: 700, color: item.color }}>₹{item.amount.toLocaleString()}</div>
+                      <div style={{ fontSize: '1rem', fontWeight: 400, color: item.color }}>₹{item.amount.toLocaleString()}</div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--muted-lavender)', marginTop: '2px' }}>{item.label}</div>
                     </div>
                   ))}
@@ -860,10 +906,10 @@ const AITripPlannerPage = () => {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '4px' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span style={{ fontSize: '1.2rem' }}>{activity.icon}</span>
-                                    <h4 style={{ fontSize: '0.92rem', color: '#1a0d2e', fontWeight: 700, margin: 0 }}>{activity.name}</h4>
+                                    <h4 style={{ fontSize: '0.92rem', color: '#1a0d2e', fontWeight: 400, margin: 0 }}>{activity.name}</h4>
                                   </div>
                                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: '6px', background: 'rgba(245,166,35,0.1)', color: 'var(--burnt-orange)', fontWeight: 600 }}>{activity.time}</span>
+                                    <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: '6px', background: 'rgba(245,166,35,0.1)', color: 'var(--burnt-orange)', fontWeight: 400 }}>{activity.time}</span>
                                     <span style={{ fontSize: '0.7rem', color: '#5a4570', fontWeight: 500 }}>⏱ {activity.duration}</span>
                                   </div>
                                 </div>
@@ -906,7 +952,7 @@ const AITripPlannerPage = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--burnt-orange), var(--golden-amber))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', color: '#fff' }}>✦</div>
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--deep-violet)' }}>AI Assistant</div>
+                        <div style={{ fontWeight: 400, fontSize: '0.88rem', color: 'var(--deep-violet)' }}>AI Assistant</div>
                         <div style={{ fontSize: '0.68rem', color: '#22C55E' }}>● Online</div>
                       </div>
                     </div>

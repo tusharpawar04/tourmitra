@@ -50,7 +50,7 @@ const DestinationDetailPage = () => {
             borderTopColor: 'var(--burnt-orange)',
             animation: 'spin 0.7s linear infinite',
           }} />
-          <p style={{ color: 'var(--deep-violet)', fontWeight: 600, fontSize: '1.05rem', marginBottom: '6px' }}>Loading destination...</p>
+          <p style={{ color: 'var(--deep-violet)', fontWeight: 400, fontSize: '1.05rem', marginBottom: '6px' }}>Loading destination...</p>
           <p style={{ color: 'var(--muted-lavender)', fontSize: '0.82rem' }}>Fetching guides & reviews</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
@@ -117,7 +117,7 @@ const DestinationDetailPage = () => {
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
               <StarRating rating={dest.rating} size="1rem" />
-              <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--deep-violet)' }}>{dest.rating}</span>
+              <span style={{ fontSize: '1rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{dest.rating}</span>
               <span style={{ fontSize: '0.85rem', color: 'var(--muted-lavender)' }}>({(dest.reviewCount || 0).toLocaleString()} reviews)</span>
             </div>
           </div>
@@ -214,10 +214,10 @@ const DestinationDetailPage = () => {
                   ].map(info => (
                     <div key={info.label} className="glass" style={{ padding: '18px', borderRadius: '12px' }}>
                       <div style={{ fontSize: '1.4rem', marginBottom: '6px' }}>{info.icon}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)', fontWeight: 400, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
                         {info.label}
                       </div>
-                      <div style={{ fontSize: '0.95rem', color: 'var(--deep-violet)', fontWeight: 600 }}>
+                      <div style={{ fontSize: '0.95rem', color: 'var(--deep-violet)', fontWeight: 400 }}>
                         {info.value}
                       </div>
                     </div>
@@ -236,17 +236,17 @@ const DestinationDetailPage = () => {
                         <div style={{ flex: 1, minWidth: '200px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                             <h4 style={{ fontSize: '1rem', color: 'var(--deep-violet)', margin: 0 }}>{guide.name}</h4>
-                            {guide.verified && <span style={{ background: '#4CAF50', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '100px', fontWeight: 700 }}>✓ Verified</span>}
+                            {guide.verified && <span style={{ background: '#4CAF50', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '100px', fontWeight: 400 }}>✓ Verified</span>}
                           </div>
                           <p style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)', marginBottom: '6px' }}>{guide.tagline}</p>
                           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
                             <StarRating rating={guide.rating} />
-                            <span style={{ fontSize: '0.8rem', color: 'var(--deep-violet)', fontWeight: 600 }}>{guide.rating}</span>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--deep-violet)', fontWeight: 400 }}>{guide.rating}</span>
                             <span style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>• {guide.tours} tours • {guide.languages.join(', ')}</span>
                           </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontWeight: 700, color: 'var(--deep-violet)', fontSize: '1.05rem', marginBottom: '8px' }}>
+                          <div style={{ fontWeight: 400, color: 'var(--deep-violet)', fontSize: '1.05rem', marginBottom: '8px' }}>
                             ₹{guide.price.toLocaleString()}<span style={{ fontWeight: 400, fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>/day</span>
                           </div>
                           <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }}
@@ -270,11 +270,11 @@ const DestinationDetailPage = () => {
                       <div key={review._id} className="glass-card" style={{ padding: '20px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--burnt-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.85rem' }}>
+                            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--burnt-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 400, fontSize: '0.85rem' }}>
                               {(review.author?.name || 'A')[0]}
                             </div>
                             <div>
-                              <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{review.author?.name || 'Anonymous'}</div>
+                              <div style={{ fontSize: '0.88rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{review.author?.name || 'Anonymous'}</div>
                               <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)' }}>{new Date(review.createdAt).toLocaleDateString()}</div>
                             </div>
                           </div>
@@ -306,14 +306,14 @@ const DestinationDetailPage = () => {
                 border: '1.5px solid rgba(245,166,35,0.3)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '20px' }}>
-                  <span style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>
+                  <span style={{ fontSize: '1.6rem', fontWeight: 400, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>
                     ₹{dest.price.toLocaleString()}
                   </span>
                   <span style={{ fontSize: '0.9rem', color: 'var(--muted-lavender)' }}>/day per guide</span>
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
                     Date
                   </label>
                   <CalendarPicker
@@ -326,7 +326,7 @@ const DestinationDetailPage = () => {
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
-                  <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
+                  <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '6px' }}>
                     Travelers
                   </label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -335,7 +335,7 @@ const DestinationDetailPage = () => {
                       style={{ width: '36px', height: '36px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--deep-violet)', cursor: 'pointer', borderRadius: '8px' }}
                       onClick={() => setTravelers(Math.max(1, travelers - 1))}
                     >−</button>
-                    <span style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--deep-violet)', minWidth: '24px', textAlign: 'center' }}>{travelers}</span>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 400, color: 'var(--deep-violet)', minWidth: '24px', textAlign: 'center' }}>{travelers}</span>
                     <button
                       className="glass"
                       style={{ width: '36px', height: '36px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--deep-violet)', cursor: 'pointer', borderRadius: '8px' }}
@@ -358,7 +358,7 @@ const DestinationDetailPage = () => {
                     <span>Platform fee</span>
                     <span>₹{Math.round(dest.price * travelers * 0.12).toLocaleString()}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', fontWeight: 700, color: 'var(--deep-violet)', marginTop: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', fontWeight: 400, color: 'var(--deep-violet)', marginTop: '12px' }}>
                     <span>Total</span>
                     <span>₹{Math.round(dest.price * travelers * 1.12).toLocaleString()}</span>
                   </div>
@@ -366,9 +366,13 @@ const DestinationDetailPage = () => {
 
                 <button className="btn-primary" style={{ width: '100%', padding: '16px', fontSize: '1rem' }}
                   onClick={() => {
-                    if (!user) return navigate('/login');
+                    if (!user) return navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
                     const guide = relatedGuides[0];
-                    if (guide) navigate(`/book/${guide._id}`);
+                    const query = [];
+                    if (bookingDate) query.push(`date=${encodeURIComponent(bookingDate)}`);
+                    if (travelers > 1) query.push(`guests=${travelers}`);
+                    const qStr = query.length > 0 ? `?${query.join('&')}` : '';
+                    if (guide) navigate(`/book/${guide._id}${qStr}`);
                     else navigate('/guides');
                   }}
                 >
@@ -402,7 +406,7 @@ const DestinationDetailPage = () => {
                       <h3 style={{ fontSize: '1rem', color: 'var(--deep-violet)' }}>{d.name}</h3>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                         <StarRating rating={d.rating} />
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{d.rating}</span>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{d.rating}</span>
                       </div>
                     </div>
                     <p style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{d.state} • From ₹{d.price}/day</p>

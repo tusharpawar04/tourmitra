@@ -10,6 +10,11 @@ const destinationRoutes = require('./routes/destinations');
 const guideRoutes = require('./routes/guides');
 const bookingRoutes = require('./routes/bookings');
 const reviewRoutes = require('./routes/reviews');
+const packageRoutes = require('./routes/packages');
+const availabilityRoutes = require('./routes/availability');
+const ledgerRoutes = require('./routes/ledger');
+const verificationRoutes = require('./routes/verifications');
+const itineraryRoutes = require('./routes/itineraries');
 
 const app = express();
 
@@ -51,6 +56,11 @@ app.use('/api/destinations', destinationRoutes);
 app.use('/api/guides', guideRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/availability', availabilityRoutes);
+app.use('/api/ledger', ledgerRoutes);
+app.use('/api/verifications', verificationRoutes);
+app.use('/api/itineraries', itineraryRoutes);
 
 // ── Error handler ───────────────────────────────────────
 app.use(errorHandler);

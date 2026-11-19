@@ -27,6 +27,11 @@ const TouristDashboardPage = lazy(() => import('./pages/TouristDashboardPage'));
 const BookingFlowPage = lazy(() => import('./pages/BookingFlowPage'));
 const GuideOnboardingPage = lazy(() => import('./pages/GuideOnboardingPage'));
 const GuideDashboardPage = lazy(() => import('./pages/GuideDashboardPage'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ItinerariesPage = lazy(() => import('./pages/ItinerariesPage'));
+const ItineraryDetailPage = lazy(() => import('./pages/ItineraryDetailPage'));
+const CreateItineraryPage = lazy(() => import('./pages/CreateItineraryPage'));
 
 // Minimal loading spinner
 const PageLoader = () => (
@@ -94,8 +99,21 @@ function App() {
               <GuideDashboardPage />
             </ProtectedRoute>
           } />
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute role="admin">
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/itineraries" element={<ItinerariesPage />} />
+          <Route path="/itineraries/create" element={
+            <ProtectedRoute requireAuth>
+              <CreateItineraryPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/itineraries/:id" element={<ItineraryDetailPage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/signup" element={<AuthPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
 

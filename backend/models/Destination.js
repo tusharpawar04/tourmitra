@@ -15,6 +15,8 @@ const destinationSchema = new mongoose.Schema({
   duration: { type: String, default: '' },
   bestTime: { type: String, default: '' },
   gallery: [String],
+  isActive: { type: Boolean, default: true },
+  comingSoonMessage: { type: String, default: '' },
 }, { timestamps: true });
 
 // Text index for search

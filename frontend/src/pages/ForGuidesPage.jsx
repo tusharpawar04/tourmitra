@@ -65,7 +65,7 @@ const ForGuidesPage = () => {
             How Much Can You Earn?
           </motion.h2>
           <div className="glass" style={{ padding: '36px', borderRadius: '20px', border: '1.5px solid rgba(245,166,35,0.3)' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '12px' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '12px' }}>
               Hours per week you can guide
             </label>
             <input
@@ -74,7 +74,7 @@ const ForGuidesPage = () => {
               style={{ width: '100%', accentColor: 'var(--burnt-orange)', marginBottom: '8px' }}
             />
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--muted-lavender)', marginBottom: '28px' }}>
-              <span>5 hrs</span><span style={{ fontWeight: 600, color: 'var(--deep-violet)', fontSize: '0.95rem' }}>{hoursPerWeek} hrs/week</span><span>40 hrs</span>
+              <span>5 hrs</span><span style={{ fontWeight: 400, color: 'var(--deep-violet)', fontSize: '0.95rem' }}>{hoursPerWeek} hrs/week</span><span>40 hrs</span>
             </div>
             <div style={{
               padding: '24px',
@@ -82,8 +82,8 @@ const ForGuidesPage = () => {
               borderRadius: '14px',
               border: '1px solid rgba(245,166,35,0.15)',
             }}>
-              <div style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Estimated Monthly Earnings</div>
-              <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 700, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>
+              <div style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 400 }}>Estimated Monthly Earnings</div>
+              <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 400, color: 'var(--deep-violet)', fontFamily: 'var(--font-numeric)' }}>
                 ₹{estimatedMonthly.toLocaleString()}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)', marginTop: '4px' }}>Based on average guide rate of ₹280/hr</div>
@@ -162,7 +162,7 @@ const ForGuidesPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: 700,
+                fontWeight: 400,
                 fontSize: '1.1rem',
                 flexShrink: 0,
                 fontFamily: 'var(--font-numeric)',
@@ -204,7 +204,7 @@ const ForGuidesPage = () => {
                 </div>
                 <span style={{
                   fontSize: '0.72rem',
-                  fontWeight: 600,
+                  fontWeight: 400,
                   padding: '3px 10px',
                   borderRadius: '100px',
                   background: item.required ? 'rgba(232,98,42,0.1)' : 'rgba(160,139,181,0.1)',
@@ -245,10 +245,10 @@ const ForGuidesPage = () => {
                 <p style={{ fontSize: '0.92rem', color: 'var(--deep-violet)', lineHeight: 1.7, fontStyle: 'italic', marginBottom: '20px' }}>"{testimonial.text}"</p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--deep-violet)' }}>{testimonial.name}</div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{testimonial.name}</div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{testimonial.city}</div>
                   </div>
-                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#4CAF50' }}>{testimonial.earnings}</span>
+                  <span style={{ fontSize: '0.88rem', fontWeight: 400, color: '#4CAF50' }}>{testimonial.earnings}</span>
                 </div>
               </motion.div>
             ))}

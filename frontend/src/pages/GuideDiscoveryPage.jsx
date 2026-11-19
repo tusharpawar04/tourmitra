@@ -106,7 +106,7 @@ const GuideDiscoveryPage = () => {
           <h3 style={{ fontSize: '1rem', color: 'var(--deep-violet)', marginBottom: '20px' }}>Filters</h3>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Max Price (₹/day)</label>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Max Price (₹/day)</label>
             <input
               type="range" min="500" max="3000" step="100"
               value={priceRange}
@@ -119,7 +119,7 @@ const GuideDiscoveryPage = () => {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Languages</label>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Languages</label>
             {['English', 'Hindi', 'French', 'Japanese', 'Spanish'].map(lang => (
               <label key={lang} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--muted-lavender)', cursor: 'pointer' }}>
                 <input type="checkbox" style={{ accentColor: 'var(--burnt-orange)' }} /> {lang}
@@ -128,7 +128,7 @@ const GuideDiscoveryPage = () => {
           </div>
 
           <div>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Minimum Rating</label>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Minimum Rating</label>
             {[4.5, 4.0, 3.5].map(r => (
               <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--muted-lavender)', cursor: 'pointer' }}>
                 <input type="radio" name="guide-rating" style={{ accentColor: 'var(--burnt-orange)' }} />
@@ -171,7 +171,7 @@ const GuideDiscoveryPage = () => {
                     <div style={{ position: 'relative', flexShrink: 0 }}>
                       <img src={guide.photo} alt={guide.name} style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--golden-amber)' }} />
                       {guide.verified && (
-                        <span style={{ position: 'absolute', bottom: '2px', right: '-2px', background: '#4CAF50', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '100px', fontWeight: 700 }}>✓</span>
+                        <span style={{ position: 'absolute', bottom: '2px', right: '-2px', background: '#4CAF50', color: '#fff', fontSize: '0.6rem', padding: '2px 6px', borderRadius: '100px', fontWeight: 400 }}>✓</span>
                       )}
                     </div>
 
@@ -179,7 +179,7 @@ const GuideDiscoveryPage = () => {
                     <div style={{ flex: 1, minWidth: '200px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                         <h3 style={{ fontSize: '1.15rem', color: 'var(--deep-violet)', margin: 0 }}>{guide.name}</h3>
-                        {guide.verified && <span style={{ fontSize: '0.68rem', background: 'rgba(76,175,80,0.1)', color: '#4CAF50', padding: '2px 8px', borderRadius: '100px', fontWeight: 600 }}>Verified Guide</span>}
+                        {guide.verified && <span style={{ fontSize: '0.68rem', background: 'rgba(76,175,80,0.1)', color: '#4CAF50', padding: '2px 8px', borderRadius: '100px', fontWeight: 400 }}>Verified Guide</span>}
                       </div>
                       <p style={{ fontSize: '0.85rem', color: 'var(--muted-lavender)', marginBottom: '6px' }}>📍 {guide.city}, India</p>
                       <p style={{ fontSize: '0.9rem', color: 'var(--deep-violet)', marginBottom: '10px', fontStyle: 'italic', opacity: 0.85 }}>"{guide.tagline}"</p>
@@ -187,7 +187,7 @@ const GuideDiscoveryPage = () => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <StarRating rating={guide.rating} />
-                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--deep-violet)' }}>{guide.rating}</span>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 400, color: 'var(--deep-violet)' }}>{guide.rating}</span>
                           <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>({guide.reviews} reviews)</span>
                         </div>
                         <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>• {guide.tours} tours completed</span>
@@ -201,7 +201,7 @@ const GuideDiscoveryPage = () => {
 
                     {/* Price + CTA */}
                     <div style={{ textAlign: 'right', flexShrink: 0, minWidth: '130px' }}>
-                      <div style={{ fontWeight: 700, color: 'var(--deep-violet)', fontSize: '1.2rem', marginBottom: '4px', fontFamily: 'var(--font-numeric)' }}>
+                      <div style={{ fontWeight: 400, color: 'var(--deep-violet)', fontSize: '1.2rem', marginBottom: '4px', fontFamily: 'var(--font-numeric)' }}>
                         ₹{guide.price.toLocaleString()}
                       </div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)', marginBottom: '16px' }}>per day</div>

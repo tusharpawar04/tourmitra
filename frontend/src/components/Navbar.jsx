@@ -59,6 +59,7 @@ const Navbar = () => {
           <>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/explore">Explore</Link></li>
+            <li><Link to="/itineraries">Itineraries</Link></li>
             <li><Link to="/plan" className="nav-ai-link">✦ AI Planner</Link></li>
             {(!user || user.role !== 'tourist') && (
               <li><Link to="/for-guides">For Guides</Link></li>
@@ -129,6 +130,17 @@ const Navbar = () => {
                         Public Profile
                       </Link>
                     </>
+                  ) : user?.role === 'admin' ? (
+                    <>
+                      <Link to="/admin/dashboard" className="nav-dropdown-item" onClick={() => setProfileOpen(false)}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        Admin Dashboard
+                      </Link>
+                      <Link to="/guides" className="nav-dropdown-item" onClick={() => setProfileOpen(false)}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Browse Guides
+                      </Link>
+                    </>
                   ) : (
                     <>
                       <Link to="/dashboard" className="nav-dropdown-item" onClick={() => setProfileOpen(false)}>
@@ -182,7 +194,7 @@ const Navbar = () => {
               </svg>
             </div>
             <div>
-              <div style={{ fontWeight: 600, color: 'var(--deep-violet)', fontSize: '0.95rem' }}>{user.name}</div>
+              <div style={{ fontWeight: 400, color: 'var(--deep-violet)', fontSize: '0.95rem' }}>{user.name}</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{user.email}</div>
             </div>
           </div>
@@ -192,6 +204,11 @@ const Navbar = () => {
               <Link to="/guide/dashboard" className="nav-mobile-link" onClick={() => setMobileOpen(false)}>📊 Dashboard</Link>
               <Link to="/guide/onboard" className="nav-mobile-link" onClick={() => setMobileOpen(false)}>✏️ Edit Profile</Link>
               <Link to={`/guides/${user._id}`} className="nav-mobile-link" onClick={() => setMobileOpen(false)}>👤 Public Profile</Link>
+            </>
+          ) : user?.role === 'admin' ? (
+            <>
+              <Link to="/admin/dashboard" className="nav-mobile-link" onClick={() => setMobileOpen(false)}>🛡️ Admin Dashboard</Link>
+              <Link to="/guides" className="nav-mobile-link" onClick={() => setMobileOpen(false)}>👥 Browse Guides</Link>
             </>
           ) : (
             <>

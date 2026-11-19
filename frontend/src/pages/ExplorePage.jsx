@@ -131,7 +131,7 @@ const ExplorePage = () => {
             <button
               type="submit"
               className="pill active"
-              style={{ padding: '10px 20px', fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap' }}
+              style={{ padding: '10px 20px', fontSize: '0.85rem', fontWeight: 400, whiteSpace: 'nowrap' }}
             >
               🔍 Search
             </button>
@@ -142,7 +142,7 @@ const ExplorePage = () => {
               Showing results for "<strong style={{ color: 'var(--deep-violet)' }}>{appliedSearch}</strong>"
               <button
                 onClick={clearSearch}
-                style={{ marginLeft: '8px', background: 'none', border: 'none', color: 'var(--burnt-orange)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+                style={{ marginLeft: '8px', background: 'none', border: 'none', color: 'var(--burnt-orange)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 400 }}
               >Clear</button>
             </p>
           )}
@@ -193,7 +193,7 @@ const ExplorePage = () => {
 
           {/* Price filter */}
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
               Price Range (₹/day)
             </label>
             <input
@@ -213,7 +213,7 @@ const ExplorePage = () => {
 
           {/* Duration filter */}
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
               Duration
             </label>
             {['1-2 days', '3-5 days', '5+ days'].map(d => (
@@ -226,7 +226,7 @@ const ExplorePage = () => {
 
           {/* Rating filter */}
           <div>
-            <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
+            <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>
               Minimum Rating
             </label>
             {[4.5, 4.0, 3.5].map(r => (
@@ -334,14 +334,32 @@ const ExplorePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
-                <Link to={`/destination/${dest._id}`} style={{ textDecoration: 'none' }}>
-                  <div className="glass-card" style={{ overflow: 'hidden' }}>
-                    <div style={{ position: 'relative', height: '180px', overflow: 'hidden' }}>
+                <Link to={dest.isActive !== false ? `/destination/${dest._id}` : '#'} style={{ textDecoration: 'none', pointerEvents: dest.isActive === false ? 'none' : 'auto', opacity: dest.isActive === false ? 0.7 : 1 }}>
+                  <div className="glass-card" style={{ overflow: 'hidden', position: 'relative' }}>
+                    {dest.isActive === false && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 10,
+                        background: 'rgba(245,166,35,0.95)',
+                        color: '#fff',
+                        padding: '12px 24px',
+                        borderRadius: '100px',
+                        fontWeight: 400,
+                        fontSize: '1rem',
+                        boxShadow: '0 4px 20px rgba(245,166,35,0.4)',
+                      }}>
+                        🔜 Coming Soon
+                      </div>
+                    )}
+                    <div style={{ position: 'relative', height: '180px', overflow: 'hidden', filter: dest.isActive === false ? 'grayscale(30%)' : 'none' }}>
                       <img
                         src={dest.image}
                         alt={dest.name}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                        onMouseOver={e => e.target.style.transform = 'scale(1.05)'}
+                        onMouseOver={e => dest.isActive !== false && (e.target.style.transform = 'scale(1.05)')}
                         onMouseOut={e => e.target.style.transform = 'scale(1)'}
                       />
                       <span className="tag-badge" style={{ position: 'absolute', top: '10px', left: '10px' }}>{dest.tag}</span>
@@ -349,18 +367,24 @@ const ExplorePage = () => {
                     <div style={{ padding: '16px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
                         <h3 style={{ fontSize: '1.05rem', color: 'var(--deep-violet)' }}>{dest.name}</h3>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                          <StarRating rating={dest.rating} />
-                          <span style={{ fontSize: '0.82rem', color: 'var(--deep-violet)', fontWeight: 600 }}>{dest.rating}</span>
+                        {dest.isActive !== false && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            <StarRating rating={dest.rating} />
+                            <span style={{ fontSize: '0.82rem', color: 'var(--deep-violet)', fontWeight: 400 }}>{dest.rating || '—'}</span>
+                          </div>
+                        )}
+                      </div>
+                      <p style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)', marginBottom: '10px' }}>
+                        {dest.isActive === false ? (dest.comingSoonMessage || 'Launching soon!') : `${dest.state}, India • ${dest.duration}`}
+                      </p>
+                      {dest.isActive !== false && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{dest.guideCount} guides</span>
+                          <span style={{ fontSize: '0.92rem', fontWeight: 400, color: 'var(--deep-violet)' }}>
+                            ₹{dest.price.toLocaleString()}<span style={{ fontWeight: 400, fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>/day</span>
+                          </span>
                         </div>
-                      </div>
-                      <p style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)', marginBottom: '10px' }}>{dest.state}, India • {dest.duration}</p>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{dest.guideCount} guides</span>
-                        <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--deep-violet)' }}>
-                          ₹{dest.price.toLocaleString()}<span style={{ fontWeight: 400, fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>/day</span>
-                        </span>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </Link>

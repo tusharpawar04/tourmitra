@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 import { authAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../components/Toast';
 
 const AuthPage = () => {
   const location = useLocation();
@@ -34,23 +35,18 @@ const AuthPage = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [authMethod, setAuthMethod] = useState('email'); // 'email' or 'phone'
-  const [toast, setToast] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
+  const { toast } = useToast();
 
   const handleForgotPassword = (e) => {
     e.preventDefault();
-    showToast('🚧 Password reset coming soon. Please use OTP or Google sign-in.');
+    toast.info('Coming Soon', 'Password reset is coming soon. Please use OTP or Google sign-in.');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (authMethod === 'phone') {
-      showToast('✨ Phone auth (OTP) is in demo mode — use Email instead.');
+      toast.info('Demo Mode', 'Phone auth (OTP) is in demo mode — use Email instead.');
       return;
     }
     setLoading(true);
@@ -68,11 +64,11 @@ const AuthPage = () => {
         data = await authAPI.login({ email, password, ...(isGuideFlow && { role: 'guide' }) });
       }
       authLogin(data.token, data.user);
-      showToast(`✨ Successfully logged in as ${data.user.name}`);
+      toast.success('Welcome!', `Successfully logged in as ${data.user.name}`);
       const dest = redirectParam || (data.user.role === 'guide' ? '/guide/dashboard' : '/explore');
       setTimeout(() => navigate(dest, { replace: true }), 1000);
     } catch (err) {
-      showToast('❌ ' + err.message);
+      toast.error('Authentication Error', err.message);
     } finally {
       setLoading(false);
     }
@@ -83,18 +79,18 @@ const AuthPage = () => {
     try {
       const data = await authAPI.googleLogin(credentialResponse.credential, isGuideFlow ? 'guide' : undefined);
       authLogin(data.token, data.user);
-      showToast(`✨ Successfully logged in as ${data.user.name}`);
+      toast.success('Welcome!', `Successfully logged in as ${data.user.name}`);
       const dest = redirectParam || (data.user.role === 'guide' ? '/guide/dashboard' : '/explore');
       setTimeout(() => navigate(dest, { replace: true }), 1000);
     } catch (err) {
-      showToast('❌ Google Sign-In failed: ' + err.message);
+      toast.error('Google Sign-In Failed', err.message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    showToast('❌ Google Sign-In was unsuccessful. Try again.');
+    toast.error('Google Error', 'Google Sign-In was unsuccessful. Try again.');
   };
 
   return (
@@ -105,34 +101,6 @@ const AuthPage = () => {
       justifyContent: 'center',
       padding: 'calc(var(--nav-height) + 24px) 16px 40px',
     }}>
-      {/* Toast */}
-      {toast && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          style={{
-            position: 'fixed',
-            top: 'calc(var(--nav-height) + 16px)',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'var(--glass-bg)',
-            backdropFilter: 'blur(16px)',
-            padding: '14px 28px',
-            borderRadius: '12px',
-            border: '1px solid var(--glass-border)',
-            boxShadow: 'var(--shadow-deep)',
-            fontSize: '0.9rem',
-            color: 'var(--deep-violet)',
-            fontWeight: 500,
-            zIndex: 200,
-            maxWidth: '90vw',
-            textAlign: 'center',
-          }}
-        >
-          {toast}
-        </motion.div>
-      )}
 
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.97 }}
@@ -174,7 +142,7 @@ const AuthPage = () => {
               background: 'rgba(232,98,42,0.1)',
               border: '1px solid rgba(232,98,42,0.2)',
               fontSize: '0.78rem',
-              fontWeight: 600,
+              fontWeight: 400,
               color: 'var(--burnt-orange)',
             }}>
               🎯 Guide Account
@@ -199,7 +167,7 @@ const AuthPage = () => {
               border: 'none',
               background: activeTab === 'login' ? 'var(--burnt-orange)' : 'rgba(255,255,255,0.6)',
               color: activeTab === 'login' ? '#fff' : 'var(--muted-lavender)',
-              fontWeight: 600,
+              fontWeight: 400,
               fontSize: '0.9rem',
               cursor: 'pointer',
               transition: 'all 0.3s',
@@ -216,7 +184,7 @@ const AuthPage = () => {
               border: 'none',
               background: activeTab === 'signup' ? 'var(--burnt-orange)' : 'rgba(255,255,255,0.6)',
               color: activeTab === 'signup' ? '#fff' : 'var(--muted-lavender)',
-              fontWeight: 600,
+              fontWeight: 400,
               fontSize: '0.9rem',
               cursor: 'pointer',
               transition: 'all 0.3s',
@@ -278,7 +246,7 @@ const AuthPage = () => {
         <form onSubmit={handleSubmit}>
           {activeTab === 'signup' && (
             <div style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Full Name
               </label>
               <input
@@ -294,7 +262,7 @@ const AuthPage = () => {
           {authMethod === 'email' ? (
             <>
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Email Address
                 </label>
                 <input
@@ -307,7 +275,7 @@ const AuthPage = () => {
                 />
               </div>
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Password
                 </label>
                 <input
@@ -322,7 +290,7 @@ const AuthPage = () => {
             </>
           ) : (
             <div style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Phone Number
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -347,7 +315,7 @@ const AuthPage = () => {
           {/* OTP field (shown for phone only) */}
           {authMethod === 'phone' && (
             <div style={{ marginBottom: '6px' }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 OTP
               </label>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -356,7 +324,7 @@ const AuthPage = () => {
                   className="input-glass"
                   placeholder="Enter OTP"
                   maxLength={6}
-                  style={{ flex: 1, letterSpacing: '0.3em', textAlign: 'center', fontWeight: 600 }}
+                  style={{ flex: 1, letterSpacing: '0.3em', textAlign: 'center', fontWeight: 400 }}
                 />
                 <button
                   type="button"
@@ -416,7 +384,7 @@ const AuthPage = () => {
           {activeTab === 'login' ? "Don't have an account? " : 'Already have an account? '}
           <button
             onClick={() => setActiveTab(activeTab === 'login' ? 'signup' : 'login')}
-            style={{ background: 'none', border: 'none', color: 'var(--burnt-orange)', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem', fontFamily: 'var(--font-body)' }}
+            style={{ background: 'none', border: 'none', color: 'var(--burnt-orange)', fontWeight: 400, cursor: 'pointer', fontSize: '0.85rem', fontFamily: 'var(--font-body)' }}
           >
             {activeTab === 'login' ? 'Sign Up' : 'Log In'}
           </button>
@@ -433,7 +401,7 @@ const AuthPage = () => {
             border: '1px solid rgba(192,68,106,0.12)',
           }}>
             <p style={{ fontSize: '0.82rem', color: 'var(--muted-lavender)' }}>
-              Are you a local guide? <Link to="/signup?role=guide&redirect=/guide/onboard" style={{ color: 'var(--magenta)', fontWeight: 600 }}>Register as Guide →</Link>
+              Are you a local guide? <Link to="/signup?role=guide&redirect=/guide/onboard" style={{ color: 'var(--magenta)', fontWeight: 400 }}>Register as Guide →</Link>
             </p>
           </div>
         )}

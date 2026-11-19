@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lato:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Lato:wght@300;400&display=swap');
 @import url('https://db.onlinewebfonts.com/c/14cf535f16d1ffa18336e9212a4a6b48?family=Copernicus');
-@import "tailwindcss";
 
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -63,6 +62,7 @@ h1, h2, h3, h4, h5 {
   font-family: var(--font-heading);
   color: var(--deep-violet);
   line-height: 1.2;
+  font-weight: 400;
 }
 
 a {
@@ -120,7 +120,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: #fff;
   border: none;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   transition: all 0.3s ease;
@@ -143,7 +143,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: var(--burnt-orange);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 0.95rem;
   transition: all 0.3s ease;
 }
@@ -163,7 +163,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   border: 1px solid var(--glass-border);
   border-radius: 100px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--muted-lavender);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -211,7 +211,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: var(--magenta);
   border-radius: 100px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.02em;
 }
 
@@ -281,7 +281,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 }
 .nav-links a {
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(255,255,255,0.85);
   transition: color 0.3s;
 }
@@ -295,7 +295,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-weight: 700;
+  font-weight: 400;
   position: relative;
 }
 .navbar.scrolled .nav-links a.nav-ai-link,
@@ -321,7 +321,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: #fff;
   border: 1.5px solid rgba(255,255,255,0.4);
   border-radius: 10px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 0.88rem;
   transition: all 0.3s;
 }
@@ -339,7 +339,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 0.88rem;
   box-shadow: 0 4px 12px rgba(232, 98, 42, 0.3);
   transition: all 0.3s;
@@ -409,7 +409,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: var(--burnt-orange);
   font-family: var(--font-body);
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 18px;
@@ -467,7 +467,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   color: var(--burnt-orange);
   font-family: monospace, var(--font-body);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
   transition: all 0.3s;
   white-space: nowrap;
@@ -516,7 +516,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 .footer-watermark-text {
   font-family: var(--font-heading);
   font-size: clamp(6rem, 18vw, 14rem);
-  font-weight: 700;
+  font-weight: 400;
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(232, 98, 42, 0.22);
   text-stroke: 1.5px rgba(232, 98, 42, 0.22);
@@ -818,6 +818,177 @@ button { cursor: pointer; font-family: var(--font-body); }
   }
 }
 
+/* ===== NAV NOTIFICATIONS ===== */
+.nav-notif-wrap {
+  position: relative;
+}
+
+.nav-notif-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.85);
+}
+.nav-notif-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: var(--golden-amber);
+  color: var(--golden-amber);
+}
+.nav-notif-btn.dark {
+  background: rgba(245, 166, 35, 0.08);
+  border-color: var(--glass-border);
+  color: var(--deep-violet);
+}
+.nav-notif-btn.dark:hover {
+  background: rgba(245, 166, 35, 0.15);
+  border-color: var(--golden-amber);
+  color: var(--burnt-orange);
+}
+
+.nav-notif-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EF4444;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.nav-notif-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  max-width: 90vw;
+  padding: 12px;
+  border-radius: 18px;
+  z-index: 300;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(40px) saturate(1.4);
+  -webkit-backdrop-filter: blur(40px) saturate(1.4);
+  border: 1.5px solid rgba(245, 166, 35, 0.2);
+  animation: navDropIn 0.25s cubic-bezier(.22,.68,0,1);
+  box-shadow: 0 16px 50px rgba(26, 13, 46, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+.nav-notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 10px 8px;
+  border-bottom: 1px solid rgba(245, 166, 35, 0.12);
+}
+
+.nav-notif-count-badge {
+  font-size: 0.7rem;
+  font-weight: 400;
+  padding: 2px 7px;
+  border-radius: 100px;
+  background: rgba(232, 98, 42, 0.12);
+  color: var(--burnt-orange);
+}
+
+.nav-notif-read-all {
+  background: none;
+  border: none;
+  font-size: 0.72rem;
+  color: var(--burnt-orange);
+  font-weight: 400;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.nav-notif-read-all:hover {
+  text-decoration: underline;
+}
+
+.nav-notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+.nav-notif-empty {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted-lavender);
+}
+
+.nav-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(245, 166, 35, 0.08);
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.nav-notif-item:hover {
+  background: rgba(245, 166, 35, 0.06);
+  border-color: rgba(245, 166, 35, 0.2);
+}
+.nav-notif-item.unread {
+  background: rgba(245, 166, 35, 0.06);
+  border-color: rgba(245, 166, 35, 0.25);
+}
+
+.nav-notif-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.nav-notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-notif-title {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--deep-violet);
+  margin-bottom: 2px;
+}
+
+.nav-notif-desc {
+  font-size: 0.74rem;
+  color: var(--muted-lavender);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.nav-notif-time {
+  font-size: 0.68rem;
+  color: rgba(160, 139, 181, 0.8);
+}
+
+.nav-notif-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--burnt-orange);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
 /* ===== NAV PROFILE SYSTEM ===== */
 .nav-profile-wrap {
   position: relative;
@@ -866,7 +1037,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.78rem;
   font-family: var(--font-body);
   letter-spacing: 0.03em;
@@ -918,13 +1089,13 @@ button { cursor: pointer; font-family: var(--font-body); }
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.85rem;
   flex-shrink: 0;
 }
 
 .nav-dropdown-name {
-  font-weight: 600;
+  font-weight: 400;
   font-size: 0.92rem;
   color: var(--deep-violet);
   line-height: 1.3;
@@ -943,7 +1114,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   padding: 2px 8px;
   border-radius: 100px;
   font-size: 0.68rem;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   background: rgba(232, 98, 42, 0.12);
@@ -976,7 +1147,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   background: none;
   font-family: var(--font-body);
   font-size: 0.88rem;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--deep-violet);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1022,7 +1193,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.82rem;
 }
 .nav-mobile-link {
@@ -1033,7 +1204,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   background: none;
   font-family: var(--font-body);
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--deep-violet);
   cursor: pointer;
   text-decoration: none;
@@ -1088,7 +1259,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 .tm-calendar-trigger .tm-calendar-label {
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--deep-violet);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1135,15 +1306,15 @@ button { cursor: pointer; font-family: var(--font-body); }
   z-index: 1000;
   width: 310px;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(40px) saturate(1.4);
   -webkit-backdrop-filter: blur(40px) saturate(1.4);
   border: 1.5px solid rgba(245, 166, 35, 0.2);
   border-radius: 18px;
   box-shadow:
-    0 16px 60px rgba(26, 13, 46, 0.22),
+    0 20px 60px rgba(26, 13, 46, 0.25),
     0 2px 12px rgba(245, 166, 35, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   animation: calendarSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .tm-calendar-dropdown.compact {
@@ -1168,7 +1339,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 .tm-calendar-month-label {
   font-family: var(--font-heading);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--deep-violet);
   letter-spacing: 0.01em;
 }
@@ -1208,7 +1379,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 .tm-calendar-day-labels span {
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--muted-lavender);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -1225,7 +1396,7 @@ button { cursor: pointer; font-family: var(--font-body); }
   background: transparent;
   color: var(--deep-violet);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 400;
   font-family: var(--font-numeric);
   cursor: pointer;
   transition: all 0.18s ease;
@@ -1240,7 +1411,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 .tm-calendar-day.today:not(.selected) {
   background: rgba(192, 68, 106, 0.08);
   color: var(--magenta);
-  font-weight: 700;
+  font-weight: 400;
   position: relative;
 }
 .tm-calendar-day.today:not(.selected)::after {
@@ -1257,7 +1428,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 .tm-calendar-day.selected {
   background: linear-gradient(135deg, var(--burnt-orange), var(--golden-amber));
   color: #fff;
-  font-weight: 700;
+  font-weight: 400;
   box-shadow: 0 3px 12px rgba(232, 98, 42, 0.35);
   transform: scale(1.08);
 }
@@ -1277,7 +1448,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 .tm-calendar-quick-btn {
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 400;
   border: none;
   background: transparent;
   color: var(--muted-lavender);
@@ -1292,7 +1463,7 @@ button { cursor: pointer; font-family: var(--font-body); }
 }
 .tm-calendar-quick-btn.today-btn {
   color: var(--burnt-orange);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 /* ── Responsive ── */
@@ -1443,4 +1614,30 @@ button { cursor: pointer; font-family: var(--font-body); }
   .btn-primary, .btn-secondary { min-height: 44px; }
   .input-glass { min-height: 44px; font-size: 16px !important; /* prevents iOS zoom */ }
   select { min-height: 44px; font-size: 16px !important; }
+}
+
+
+/* ═══ HOMEPAGE BENTO GRID ═══ */
+.bento-dest-card {
+  transition: transform 0.35s cubic-bezier(.22,.68,0,1);
+}
+.bento-dest-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Tablet: collapse bento to simpler grid */
+@media (max-width: 1024px) {
+  .bento-dest-card {
+    grid-column: span 6 !important;
+    grid-row: span 1 !important;
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 600px) {
+  .bento-dest-card {
+    grid-column: span 12 !important;
+    grid-row: span 1 !important;
+    min-height: 220px;
+  }
 }

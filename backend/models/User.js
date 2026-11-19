@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['tourist', 'guide', 'admin'], default: 'tourist' },
   phone: { type: String, default: '' },
   memberSince: { type: Date, default: Date.now },
+  
+  // Verification status
+  verification_status: { 
+    type: String, 
+    enum: ['not_started', 'submitted', 'in_review', 'verified', 'rejected', 'additional_info_required'],
+    default: 'not_started'
+  },
 
   // Tourist-specific
   savedGuides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],

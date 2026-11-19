@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { guidesAPI, packagesAPI } from '../services/api';
+import { useToast } from '../components/Toast';
 
 const GuideOnboardingPage = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const totalSteps = 4;
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
 
   // Form state
   const [profile, setProfile] = useState({ fullName: '', phone: '', city: '', bio: '' });
@@ -13,13 +19,35 @@ const GuideOnboardingPage = () => {
   const [pricePerDay, setPricePerDay] = useState(1500);
   const [availability, setAvailability] = useState([]);
   const [sampleItinerary, setSampleItinerary] = useState({ title: '', description: '' });
+  const [packages, setPackages] = useState([
+    { title: 'Heritage Walk', duration_hours: 2, base_price: 800, max_guests: 6, inclusions: [], is_active: true },
+    { title: 'City Tour', duration_hours: 4, base_price: 1500, max_guests: 8, inclusions: [], is_active: true },
+    { title: 'Full Day Experience', duration_hours: 8, base_price: 3000, max_guests: 10, inclusions: [], is_active: true },
+  ]);
 
   const allSpecialties = ['Heritage', 'Spiritual', 'Adventure', 'Food Tours', 'Nature', 'Photography', 'Art & Culture', 'Wellness', 'Shopping', 'Nightlife'];
   const allLanguages = ['English', 'Hindi', 'Tamil', 'Telugu', 'Bengali', 'Marathi', 'Gujarati', 'Malayalam', 'Kannada', 'French', 'Spanish', 'German', 'Japanese', 'Mandarin'];
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const commonInclusions = ['Transport', 'Entry Fees', 'Lunch', 'Snacks', 'Water Bottle', 'Photography', 'Guide Fee'];
 
   const toggleItem = (arr, setArr, item) => {
     setArr(prev => prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]);
+  };
+
+  const togglePackageInclusion = (pkgIndex, inclusion) => {
+    setPackages(prev => prev.map((pkg, i) => {
+      if (i === pkgIndex) {
+        const inclusions = pkg.inclusions.includes(inclusion)
+          ? pkg.inclusions.filter(inc => inc !== inclusion)
+          : [...pkg.inclusions, inclusion];
+        return { ...pkg, inclusions };
+      }
+      return pkg;
+    }));
+  };
+
+  const updatePackage = (index, field, value) => {
+    setPackages(prev => prev.map((pkg, i) => i === index ? { ...pkg, [field]: value } : pkg));
   };
 
   const handleFileChange = (key) => (e) => {
@@ -56,7 +84,7 @@ const GuideOnboardingPage = () => {
           {/* Progress bar */}
           <div style={{ margin: '24px 0 32px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--deep-violet)' }}>Step {step} of {totalSteps}</span>
+              <span style={{ fontSize: '0.78rem', fontWeight: 400, color: 'var(--deep-violet)' }}>Step {step} of {totalSteps}</span>
               <span style={{ fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>{Math.round((step / totalSteps) * 100)}%</span>
             </div>
             <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(245,166,35,0.15)' }}>
@@ -70,7 +98,7 @@ const GuideOnboardingPage = () => {
             {/* Step labels */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
               {['Profile', 'Documents', 'Expertise', 'Review'].map((label, i) => (
-                <span key={label} style={{ fontSize: '0.72rem', fontWeight: step === i + 1 ? 600 : 400, color: step === i + 1 ? 'var(--burnt-orange)' : 'var(--muted-lavender)' }}>{label}</span>
+                <span key={label} style={{ fontSize: '0.72rem', fontWeight: step === i + 1 ? 500 : 400, color: step === i + 1 ? 'var(--burnt-orange)' : 'var(--muted-lavender)' }}>{label}</span>
               ))}
             </div>
           </div>
@@ -89,19 +117,19 @@ const GuideOnboardingPage = () => {
                   <h2 style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Personal Information</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Full Name *</label>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Full Name *</label>
                       <input type="text" className="input-glass" placeholder="As on your Aadhaar card" value={profile.fullName} onChange={e => setProfile({ ...profile, fullName: e.target.value })} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Phone Number *</label>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Phone Number *</label>
                       <input type="tel" className="input-glass" placeholder="+91 XXXXX XXXXX" value={profile.phone} onChange={e => setProfile({ ...profile, phone: e.target.value })} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Primary City *</label>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Primary City *</label>
                       <input type="text" className="input-glass" placeholder="Where do you guide? e.g., Jaipur" value={profile.city} onChange={e => setProfile({ ...profile, city: e.target.value })} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Bio / Tagline *</label>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '6px' }}>Bio / Tagline *</label>
                       <textarea className="input-glass" rows={3} placeholder="Tell tourists why they should choose you. What makes your tours unique?" value={profile.bio} onChange={e => setProfile({ ...profile, bio: e.target.value })} style={{ resize: 'vertical' }} />
                       <p style={{ fontSize: '0.72rem', color: 'var(--muted-lavender)', marginTop: '4px' }}>{profile.bio.length}/300 characters</p>
                     </div>
@@ -137,7 +165,7 @@ const GuideOnboardingPage = () => {
                           )}
                         </div>
                         <label style={{
-                          padding: '8px 16px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 600,
+                          padding: '8px 16px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 400,
                           cursor: 'pointer', transition: 'all 0.3s',
                           background: documents[doc.key] ? 'rgba(76,175,80,0.1)' : 'rgba(232,98,42,0.1)',
                           color: documents[doc.key] ? '#4CAF50' : 'var(--burnt-orange)',
@@ -158,7 +186,7 @@ const GuideOnboardingPage = () => {
                   <h2 style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Your Expertise</h2>
 
                   <div style={{ marginBottom: '24px' }}>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Specialties (select at least 2) *</label>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Specialties (select at least 2) *</label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {allSpecialties.map(s => (
                         <button key={s} onClick={() => toggleItem(specialties, setSpecialties, s)}
@@ -169,7 +197,7 @@ const GuideOnboardingPage = () => {
                   </div>
 
                   <div style={{ marginBottom: '24px' }}>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Languages *</label>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Languages *</label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {allLanguages.map(l => (
                         <button key={l} onClick={() => toggleItem(languages, setLanguages, l)}
@@ -181,7 +209,7 @@ const GuideOnboardingPage = () => {
                   </div>
 
                   <div style={{ marginBottom: '24px' }}>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Price Per Day (₹)</label>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Price Per Day (₹)</label>
                     <input
                       type="range" min="500" max="5000" step="100" value={pricePerDay}
                       onChange={e => setPricePerDay(parseInt(e.target.value))}
@@ -189,13 +217,13 @@ const GuideOnboardingPage = () => {
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--muted-lavender)' }}>
                       <span>₹500</span>
-                      <span style={{ fontWeight: 700, color: 'var(--deep-violet)', fontSize: '1rem', fontFamily: 'var(--font-numeric)' }}>₹{pricePerDay.toLocaleString()}/day</span>
+                      <span style={{ fontWeight: 400, color: 'var(--deep-violet)', fontSize: '1rem', fontFamily: 'var(--font-numeric)' }}>₹{pricePerDay.toLocaleString()}/day</span>
                       <span>₹5,000</span>
                     </div>
                   </div>
 
                   <div style={{ marginBottom: '24px' }}>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Availability *</label>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '10px' }}>Availability *</label>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                       {days.map(d => (
                         <button key={d} onClick={() => toggleItem(availability, setAvailability, d)} style={{
@@ -203,16 +231,68 @@ const GuideOnboardingPage = () => {
                           border: availability.includes(d) ? '2px solid var(--burnt-orange)' : '1px solid var(--glass-border)',
                           background: availability.includes(d) ? 'rgba(232,98,42,0.08)' : 'transparent',
                           color: availability.includes(d) ? 'var(--burnt-orange)' : 'var(--muted-lavender)',
-                          fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer', transition: 'all 0.3s',
+                          fontWeight: 400, fontSize: '0.78rem', cursor: 'pointer', transition: 'all 0.3s',
                         }}>{d}</button>
                       ))}
                     </div>
                   </div>
 
-                  <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Sample Itinerary (optional)</label>
+                  <div style={{ marginBottom: '24px' }}>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '8px' }}>Sample Itinerary (optional)</label>
                     <input type="text" className="input-glass" placeholder="e.g., Jaipur Heritage Walk" value={sampleItinerary.title} onChange={e => setSampleItinerary({ ...sampleItinerary, title: e.target.value })} style={{ marginBottom: '10px' }} />
                     <textarea className="input-glass" rows={3} placeholder="Describe highlights, stops, duration..." value={sampleItinerary.description} onChange={e => setSampleItinerary({ ...sampleItinerary, description: e.target.value })} style={{ resize: 'vertical' }} />
+                  </div>
+
+                  <div>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 400, color: 'var(--deep-violet)', display: 'block', marginBottom: '12px' }}>Guide Packages *</label>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)', marginBottom: '12px' }}>Customize your packages. Suggested pricing: 2hr (₹700-1200), 4hr (₹1400-2500), 8hr (₹2800-5000)</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {packages.map((pkg, i) => (
+                        <div key={i} className="glass-card" style={{ padding: '16px' }}>
+                          <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                            <input
+                              type="text"
+                              className="input-glass"
+                              placeholder="Package title"
+                              value={pkg.title}
+                              onChange={e => updatePackage(i, 'title', e.target.value)}
+                              style={{ flex: '1 1 200px', padding: '8px 12px', fontSize: '0.85rem' }}
+                            />
+                            <input
+                              type="number"
+                              className="input-glass"
+                              placeholder="Price"
+                              value={pkg.base_price}
+                              onChange={e => updatePackage(i, 'base_price', parseInt(e.target.value) || 0)}
+                              style={{ width: '100px', padding: '8px 12px', fontSize: '0.85rem' }}
+                            />
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--muted-lavender)', marginBottom: '8px' }}>
+                            Duration: {pkg.duration_hours}hrs • Max {pkg.max_guests} guests
+                          </div>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                            {commonInclusions.map(inc => (
+                              <button
+                                key={inc}
+                                onClick={() => togglePackageInclusion(i, inc)}
+                                style={{
+                                  padding: '4px 10px',
+                                  fontSize: '0.7rem',
+                                  borderRadius: '6px',
+                                  border: pkg.inclusions.includes(inc) ? '1px solid var(--burnt-orange)' : '1px solid var(--glass-border)',
+                                  background: pkg.inclusions.includes(inc) ? 'rgba(232,98,42,0.08)' : 'transparent',
+                                  color: pkg.inclusions.includes(inc) ? 'var(--burnt-orange)' : 'var(--muted-lavender)',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s',
+                                }}
+                              >
+                                {pkg.inclusions.includes(inc) ? '✓ ' : ''}{inc}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -259,7 +339,7 @@ const GuideOnboardingPage = () => {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.85rem' }}>
                       <span style={{ color: 'var(--muted-lavender)' }}>Price</span>
-                      <span style={{ color: 'var(--deep-violet)', fontWeight: 700 }}>₹{pricePerDay.toLocaleString()}/day</span>
+                      <span style={{ color: 'var(--deep-violet)', fontWeight: 400 }}>₹{pricePerDay.toLocaleString()}/day</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                       <span style={{ color: 'var(--muted-lavender)' }}>Available</span>
@@ -269,13 +349,30 @@ const GuideOnboardingPage = () => {
 
                   <div style={{ background: 'rgba(245,166,35,0.06)', border: '1px solid rgba(245,166,35,0.15)', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
                     <p style={{ fontSize: '0.85rem', color: 'var(--deep-violet)', lineHeight: 1.6 }}>
-                      By submitting, you agree to Tourmitra's <a href="#" style={{ color: 'var(--burnt-orange)', fontWeight: 600 }}>Guide Terms of Service</a> and consent to background verification.
+                      By submitting, you agree to Tourmitra's <a href="#" style={{ color: 'var(--burnt-orange)', fontWeight: 400 }}>Guide Terms of Service</a> and consent to background verification.
                     </p>
                   </div>
 
-                  <button className="btn-primary" style={{ width: '100%', padding: '14px', fontSize: '1rem' }}
-                    onClick={() => alert('🎉 Application Submitted!\n\nWe will review your documents within 48 hours. You\'ll receive an email/SMS once approved.')}
-                  >Submit Application 🚀</button>
+                  <button 
+                    className="btn-primary" 
+                    style={{ width: '100%', padding: '14px', fontSize: '1rem', opacity: submitting ? 0.6 : 1, cursor: submitting ? 'wait' : 'pointer' }}
+                    disabled={submitting}
+                    onClick={async () => {
+                      setSubmitting(true);
+                      try {
+                        // In alpha: create packages if guide profile exists
+                        // Real implementation: submit all data to guide registration API
+                        await packagesAPI.createBatch(packages);
+                        toast.success('🎉 Application Submitted!', 'We will review your documents within 48 hours. You\'ll receive an email/SMS once approved. Your packages have been created!');
+                        navigate('/guide/dashboard');
+                      } catch (err) {
+                        console.error('Submit error:', err);
+                        toast.error('Submission Error', err.response?.data?.error || 'Please try again.');
+                      } finally {
+                        setSubmitting(false);
+                      }
+                    }}
+                  >{submitting ? 'Submitting...' : 'Submit Application 🚀'}</button>
                 </div>
               )}
             </motion.div>
